@@ -2,7 +2,6 @@ package br.com.klincloud.jokenpo.filter;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

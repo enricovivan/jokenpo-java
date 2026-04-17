@@ -2,11 +2,14 @@ package br.com.klincloud.jokenpo.model;
 
 import java.util.UUID;
 
+import br.com.klincloud.jokenpo.enumerate.Jokenpo;
 import br.com.klincloud.jokenpo.enumerate.Result;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,21 +20,23 @@ public class GameModel {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String playerName;
-    private String computerOption;
-    private String playerOption;
+    @ManyToOne
+    @JoinColumn(name = "player_id")
+    private PlayerModel player;
+    private Jokenpo computerOption;
+    private Jokenpo playerOption;
     private Result result;
 
     public GameModel() {
     }
 
     public GameModel (
-        String playerName,
-        String computerOption,
-        String playerOption,
+        PlayerModel player,
+        Jokenpo computerOption,
+        Jokenpo playerOption,
         Result result
     ) {
-        this.playerName = playerName;
+        this.player = player;
         this.computerOption = computerOption;
         this.playerOption = playerOption;
         this.result = result;
@@ -43,22 +48,22 @@ public class GameModel {
     public void setId(UUID id) {
         this.id = id;
     }
-    public String getPlayerName() {
-        return playerName;
+    public PlayerModel getPlayer() {
+        return player;
     }
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void setPlayer(PlayerModel player) {
+        this.player = player;
     }
-    public String getComputerOption() {
+    public Jokenpo getComputerOption() {
         return computerOption;
     }
-    public void setComputerOption(String computerOption) {
+    public void setComputerOption(Jokenpo computerOption) {
         this.computerOption = computerOption;
     }
-    public String getPlayerOption() {
+    public Jokenpo getPlayerOption() {
         return playerOption;
     }
-    public void setPlayerOption(String playerOption) {
+    public void setPlayerOption(Jokenpo playerOption) {
         this.playerOption = playerOption;
     }
     public Result getResult() {

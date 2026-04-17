@@ -1,9 +1,7 @@
 package br.com.klincloud.jokenpo.service;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.klincloud.jokenpo.dto.request.PlayRequestDto;
@@ -11,30 +9,37 @@ import br.com.klincloud.jokenpo.dto.response.PlayResponseDto;
 import br.com.klincloud.jokenpo.enumerate.Jokenpo;
 import br.com.klincloud.jokenpo.enumerate.Result;
 import br.com.klincloud.jokenpo.model.GameModel;
+import br.com.klincloud.jokenpo.model.PlayerModel;
 import br.com.klincloud.jokenpo.repository.GamesRepository;
+import br.com.klincloud.jokenpo.repository.PlayerRepository;
 
 @Service
 public class GameService {
 
     private final GamesRepository gameRepository;
+    private final PlayerRepository playerRepository;
 
-    public GameService(GamesRepository gameRepository) {
+    public GameService(GamesRepository gameRepository, PlayerRepository playerRepository) {
         this.gameRepository = gameRepository;
+        this.playerRepository = playerRepository;
     }
 
     // logica de negocio
     public PlayResponseDto play(PlayRequestDto req) {
         
+        // verifica se o player existe no banco de dados, se nao existir cria e retorna
+        PlayerModel player = verifyPlayer(req.getPlayer());
+        Jokenpo playerOption = req.getOption();
+        
         // gera uma jogada aleatória
         Jokenpo computer = Jokenpo.values()[new Random().nextInt(Jokenpo.values().length)];
-        Jokenpo player = req.getOption();
 
         PlayResponseDto result = new PlayResponseDto();
 
-        result.setPlayerOption(player.toString());
-        result.setComputerOption(computer.toString());
+        result.setPlayerOption(playerOption);
+        result.setComputerOption(computer);
 
-        var winner = result(player, computer);
+        var winner = result(playerOption, computer);
         if (winner == Result.WIN) {
             result.setResult(winner);
             result.setMessage("Você venceu!");
@@ -47,7 +52,9 @@ public class GameService {
         }
 
         // salva o resultado no db
-        gameRepository.save(new GameModel(req.getPlayerName(), computer.toString(), player.toString(), winner));
+        gameRepository.save(
+            new GameModel(player, computer, playerOption, winner)
+        );
 
         return result;
 
@@ -71,6 +78,19 @@ public class GameService {
         }
 
         return null;
+    }
+
+    // metodo para verificar se o player já existe no banco de dados, se não existir, cria
+    private PlayerModel verifyPlayer(PlayerModel player) {
+        String name = player.getName();
+
+        var playerRepo = playerRepository.findByName(name);
+
+        if (playerRepo.isEmpty()) {
+            return playerRepository.save(player);
+        }
+
+        return playerRepo.get();
     }
 
 }

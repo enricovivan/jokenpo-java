@@ -47,4 +47,14 @@ public class HistoryService {
         return games.stream().toList();
     }
 
+    public List<GameModel> getAllGamesFromPlayerId(UUID playerId){
+        var games = gameRepository.findByPlayerId(playerId);
+
+        if (games.isEmpty()) {
+            return List.of();
+        }
+
+        return games.stream().toList();
+    }
+
 }

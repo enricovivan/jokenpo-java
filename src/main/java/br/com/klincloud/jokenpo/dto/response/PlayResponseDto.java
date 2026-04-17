@@ -1,5 +1,6 @@
 package br.com.klincloud.jokenpo.dto.response;
 
+import br.com.klincloud.jokenpo.enumerate.Jokenpo;
 import br.com.klincloud.jokenpo.enumerate.Result;
 
 public class PlayResponseDto {
@@ -8,14 +9,14 @@ public class PlayResponseDto {
     
     private Result result;
 
-    private String playerOption;
-    private String computerOption;
+    private Jokenpo playerOption;
+    private Jokenpo computerOption;
 
     public PlayResponseDto() {
 
     }
     
-    public PlayResponseDto(String message, Result result, String playerOption, String computerOption) {
+    public PlayResponseDto(String message, Result result, Jokenpo playerOption, Jokenpo computerOption) {
         this.message = message;
         this.result = result;
         this.playerOption = playerOption;
@@ -38,19 +39,19 @@ public class PlayResponseDto {
         this.result = result;
     }
 
-    public String getPlayerOption() {
+    public Jokenpo getPlayerOption() {
         return playerOption;
     }
 
-    public void setPlayerOption(String playerOption) {
+    public void setPlayerOption(Jokenpo playerOption) {
         this.playerOption = playerOption;
     }
 
-    public String getComputerOption() {
+    public Jokenpo getComputerOption() {
         return computerOption;
     }
 
-    public void setComputerOption(String computerOption) {
+    public void setComputerOption(Jokenpo computerOption) {
         this.computerOption = computerOption;
     }
     

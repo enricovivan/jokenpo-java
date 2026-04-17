@@ -10,5 +10,6 @@ import br.com.klincloud.jokenpo.model.GameModel;
 public interface GamesRepository extends JpaRepository<GameModel, UUID> {
     
     List<GameModel> findByPlayerName(String playerName);
+    List<GameModel> findByPlayerId(UUID playerId);
 
 }

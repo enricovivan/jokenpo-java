@@ -3,6 +3,7 @@ package br.com.klincloud.jokenpo.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,12 +30,24 @@ public class HistoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GameModel> getGameById(@PathVariable UUID id){
-        return ResponseEntity.ok(historyService.getGameById(id));
+
+        var game = historyService.getGameById(id);
+
+        if (game == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return ResponseEntity.ok(game);
     }
 
-    @GetMapping("/player/{playerName}")
+    @GetMapping("/player/name/{playerName}")
     public ResponseEntity<List<GameModel>> getAllGamesFromPlayerName(@PathVariable String playerName){
         return ResponseEntity.ok(historyService.getAllGamesFromPlayerName(playerName));
+    }
+
+    @GetMapping("/player/id/{playerId}")
+    public ResponseEntity<List<GameModel>> getAllGamesFromPlayerId(@PathVariable UUID playerId){
+        return ResponseEntity.ok(historyService.getAllGamesFromPlayerId(playerId));
     }
 
 }
