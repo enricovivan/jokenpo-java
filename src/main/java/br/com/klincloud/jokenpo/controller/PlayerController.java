@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,13 +28,20 @@ public class PlayerController {
     }
 
     @GetMapping("all")
-    public List<PlayerModel> getAllPlayers() {
-        return playerService.getAllPlayers();
+    public ResponseEntity<List<PlayerModel>> getAllPlayers() {
+        return ResponseEntity.ok(playerService.getAllPlayers());
     }
 
     @GetMapping("/{id}")
-    public Optional<PlayerModel> getPlayerById(@PathVariable UUID id) {
-        return playerService.getPlayerById(id);
+    public ResponseEntity<Optional<PlayerModel>> getPlayerById(@PathVariable UUID id) {
+
+        var player = playerService.getPlayerById(id);
+
+        if (player.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(playerService.getPlayerById(id));
     }
     
     
