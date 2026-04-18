@@ -1,0 +1,12 @@
+services:
+  jokenpo-api:
+    build: .
+    container_name: jokenpo-api
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      # Você pode adicionar as variáveis do arquivo .env aqui se necessário usando:
+      # env_file:
+      #   - .env
